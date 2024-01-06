@@ -5,23 +5,46 @@
     <title>Aram Runes</title>
   </head>
   <body>
-    <form id="champSearch">
-      <input id="champName" /> <button type="submit">Search</button>
-    </form>
+    <div
+      style="margin-bottom: 12px; flex; justify-content: center; width: 100%"
+    >
+      <form
+        style="
+          gap: 1rem;
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          margin-bottom: 12px;
+        "
+        id="champSearch"
+      >
+        <input id="champName" /> <button type="submit">Search</button>
+      </form>
+    </div>
     <div style="display: flex; align-items: center; gap: 2rem">
       <img id="champImage" />
       <h1 id="name"></h1>
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          height: 125px;
+          justify-content: space-around;
+        "
+      >
+        <div class="skill-priority-path" id="path"></div>
+        <div class="item-row" id="core"></div>
+      </div>
     </div>
 
     <webview
       id="wv"
       style="height: 0; width: 0"
       src="https://u.gg/lol/champions/aram/yone-aram"
-      useragent="My Super Browser v1.0 Youpi Tralala !"
     >
     </webview>
     <img id="loading" style="height: 200px; width: 200px" src="./loading.gif" />
-    <div style="display: flex">
+    <div style="width: 100%; display: flex; justify-content: space-around">
       <div id="runes"></div>
       <div id="runes2"></div>
     </div>
