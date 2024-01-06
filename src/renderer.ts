@@ -35,6 +35,8 @@ const getChamp = (e: Event) => {
   el('runes').innerHTML = '';
   el('runes2').innerHTML = '';
   el('name').innerHTML = '';
+  el('path').innerHTML = '';
+  el('core').innerHTML = '';
   el('champImage').setAttribute('src', '');
   el('wv').setAttribute('src', `https://u.gg/lol/champions/aram/${champ}-aram`);
   e.preventDefault();
