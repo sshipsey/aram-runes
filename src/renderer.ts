@@ -1,31 +1,69 @@
-/**
- * This file will automatically be loaded by vite and run in the "renderer" context.
- * To learn more about the differences between the "main" and the "renderer" context in
- * Electron, visit:
- *
- * https://electronjs.org/docs/tutorial/application-architecture#main-and-renderer-processes
- *
- * By default, Node.js integration in this file is disabled. When enabling Node.js integration
- * in a renderer process, please be aware of potential security implications. You can read
- * more about security risks here:
- *
- * https://electronjs.org/docs/tutorial/security
- *
- * To enable Node.js integration in this file, open up `main.ts` and enable the `nodeIntegration`
- * flag:
- *
- * ```
- *  // Create the browser window.
- *  mainWindow = new BrowserWindow({
- *    width: 800,
- *    height: 600,
- *    webPreferences: {
- *      nodeIntegration: true
- *    }
- *  });
- * ```
- */
-
+import { WebviewTag } from 'electron';
 import './index.css';
+import { load } from 'cheerio';
 
-console.log('👋 This message is being logged by "renderer.ts", included via Vite');
+const el = (id: string) => document.getElementById(id);
+
+el('wv').addEventListener('dom-ready', () => {
+  console.log('DOM READY!');
+  let runes: { isActive: boolean; img: string }[] = [];
+  el('runes').innerHTML = '';
+  el('name').innerHTML = '';
+  el('champImage').setAttribute('src', '');
+  (el('wv') as WebviewTag)
+    .executeJavaScript(
+      `function gethtml () {
+    return new Promise((resolve, reject) => { resolve(document.documentElement.innerHTML); });
+    }
+    gethtml();`
+    )
+    .then((html) => {
+      const $ = load(html);
+      el('champImage').setAttribute('src', $('.champion-image').attr('src'));
+      el('name').innerHTML = $('.champion-name').html();
+      el('loading').style.display = 'none';
+      console.log($('.perk').length);
+      $('.perk').each((i, el) => {
+        const isActive = $(el).hasClass('perk-active');
+        const img = $(el).children()[0].attribs['src'];
+        runes = runes.concat({ isActive, img });
+      });
+      $('.perk').each((i, el) => {
+        const isActive = $(el).hasClass('perk-active');
+        const img = $(el).children()[0].attribs['src'];
+        runes = runes.concat({ isActive, img });
+      });
+
+      runes = runes.slice(0, 22);
+      const runeEls = runes.map((rune) => {
+        const img = document.createElement('img');
+        img.src = rune.img;
+        img.style.border = rune.isActive ? '4px solid green' : 'none';
+        return img;
+      });
+      runeEls.forEach((runeEl, idx) => {
+        if (idx < 13) {
+          el('runes').appendChild(runeEl);
+          if (idx === 3 || (idx > 3 && idx % 3 === 0)) {
+            el('runes').appendChild(document.createElement('br'));
+          }
+        } else {
+          el('runes2').appendChild(runeEl);
+          if (idx > 3 && idx % 3 === 0) {
+            el('runes2').appendChild(document.createElement('br'));
+          }
+        }
+      });
+    });
+});
+
+const getChamp = (e: Event) => {
+  const champ = (el('champName') as HTMLInputElement).value;
+  el('wv').setAttribute('src', `https://u.gg/lol/champions/aram/${champ}-aram`);
+  e.preventDefault();
+};
+
+el('champSearch').addEventListener('submit', (event) => {
+  el('loading').style.display = 'block';
+  getChamp(event);
+});

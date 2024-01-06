@@ -2,12 +2,29 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
-
+    <title>Aram Runes</title>
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <form id="champSearch">
+      <input id="champName" /> <button type="submit">Search</button>
+    </form>
+    <div style="display: flex; align-items: center; gap: 2rem">
+      <img id="champImage" />
+      <h1 id="name"></h1>
+    </div>
+
+    <webview
+      id="wv"
+      style="height: 0; width: 0"
+      src="https://u.gg/lol/champions/aram/yone-aram"
+      useragent="My Super Browser v1.0 Youpi Tralala !"
+    >
+    </webview>
+    <img id="loading" style="height: 200px; width: 200px" src="./loading.gif" />
+    <div style="display: flex">
+      <div id="runes"></div>
+      <div id="runes2"></div>
+    </div>
     <script type="module" src="/src/renderer.ts"></script>
   </body>
 </html>
